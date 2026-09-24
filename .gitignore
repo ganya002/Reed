@@ -6,3 +6,5 @@ data/
 frontend/node_modules/
 frontend/dist/
 .DS_Store
+frontend/test-results/
+frontend/playwright-report/
