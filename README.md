@@ -2,9 +2,19 @@
 
 Reed is a local voice studio for Apple silicon. It designs, clones, and plays speech on your Mac. Reference clips and generated audio stay on this machine. The only network use is downloading model weights from Hugging Face.
 
+## Install
+
+On an Apple silicon Mac that already has [Homebrew](https://brew.sh):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/ganya002/Reed/main/install.sh | bash
+```
+
+That installs uv, ffmpeg, and Node.js if they are missing, clones Reed into `~/Reed`, builds the studio, and starts it. Set `REED_DIR` to choose a different folder.
+
 ## Run
 
-On an Apple silicon Mac, with [uv](https://docs.astral.sh/uv/), Node.js, and ffmpeg:
+If Reed is already cloned, and [uv](https://docs.astral.sh/uv/), Node.js, and ffmpeg are installed:
 
 ```bash
 ./run
