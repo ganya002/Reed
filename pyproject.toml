@@ -1,0 +1,24 @@
+[project]
+name = "reed"
+version = "0.1.0"
+description = "Reed is a local voice studio for Apple silicon."
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "mlx-audio==0.4.4",
+  "fastapi>=0.115.12",
+  "uvicorn>=0.34.0",
+  "python-multipart>=0.0.20",
+  "huggingface_hub>=1.0",
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3.0",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["backend"]

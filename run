@@ -1,0 +1,31 @@
+#!/bin/zsh
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")" && pwd)"
+cd "$ROOT"
+
+if [[ "$(uname -s)" != "Darwin" || "$(uname -m)" != "arm64" ]]; then
+  echo "Reed runs its speech models with MLX on Apple silicon."
+  exit 1
+fi
+if ! command -v uv >/dev/null 2>&1; then
+  echo "Install uv first: brew install uv"
+  exit 1
+fi
+if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
+  echo "Install ffmpeg first: brew install ffmpeg"
+  exit 1
+fi
+if ! command -v npm >/dev/null 2>&1; then
+  echo "Install Node.js so Reed can build the studio."
+  exit 1
+fi
+
+uv sync --python 3.12 --group dev
+if [[ ! -d frontend/node_modules ]]; then
+  npm --prefix frontend install
+fi
+npm --prefix frontend run build
+
+export HF_HUB_DISABLE_TELEMETRY=1
+export REED_PYTHON="$ROOT/.venv/bin/python"
+exec uv run --python 3.12 uvicorn --app-dir backend reed.main:app --host 127.0.0.1 --port "${REED_PORT:-8733}"
