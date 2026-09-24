@@ -44,3 +44,26 @@ uv run pytest
 npm --prefix frontend run dev
 uv run --python 3.12 uvicorn --app-dir backend reed.main:app --host 127.0.0.1 --port 8733
 ```
+
+## Studio workflow
+
+- Write your script, then use **Design**, **Clone**, or **Preset** in the voice panel.
+- In Design, enter a description or choose a starting point, then click **Apply voice**. The confirmation means the description is selected for the next generation; it does not synthesize a preview. Editing the description again requires **Apply changes** or **Discard changes**. Applied descriptions and unfinished scripts survive a reload.
+- **Save voice** keeps the applied description as a reusable recipe. Qwen VoiceDesign may vary its output between generations; this does not create a fixed speaker embedding. Clone a reference for that workflow.
+- **Generate speech** (or Cmd/Ctrl + Enter) creates the audio. Existing takes remain in the separate audio panel and history; changing a description does not alter an earlier recording.
+- Open **Models** for downloads, real progress, hardware information, and the local benchmark. Escape closes the drawer and returns keyboard focus to its trigger.
+- **Script tools & pronunciation** contains pronunciation substitutions, pause guidance, and voice variation. Pace and language stay beside Generate.
+- The theme button switches between light and dark appearances. Reduced-motion preferences are respected, and history is available from the menu button on narrow screens.
+
+## Frontend checks
+
+```bash
+npm --prefix frontend ci
+npm --prefix frontend exec -- playwright install chromium
+npm --prefix frontend run test:ui
+npm --prefix frontend run build
+```
+
+The browser tests use explicit mock API responses and do not download models or perform inference. They cover applied-voice state and request payloads, reload persistence, saved voices, history reuse, keyboard behavior, model download progress, disconnected state, and responsive layouts. The history test also captures light, dark, and mobile screenshots in `frontend/test-results/`.
+
+Real speech generation still needs an Apple silicon Mac with an installed model. The existing Python test `test_hardware_reports_this_mac` expects an Apple M4 specifically and will fail on another machine.
